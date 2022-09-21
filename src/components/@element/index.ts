@@ -1,8 +1,12 @@
 import type { Server } from 'yues-client';
 import type { EventEmitter as EventEmitterConstructor } from 'node:events';
-import { LUA_GLOBAL_STORAGE_VAR_NAME } from '@/constants';
+import { LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';
 import { initFunc, bindEventFunc } from './lua-functions';
+
+export const ActiveRemoteElementsStorage = Object.create(null) as {
+    [id: string]: RemoteElement<string>;
+};
 
 // private symbols
 const eventEmitterPropName = Symbol('[[EventEmitter]]');
@@ -42,7 +46,7 @@ export abstract class RemoteElement<Events extends string = never> {
     protected readonly [eventListPropName]: string[] = [];
 
     readonly [idPropName] = crypto.randomUUID();
-    readonly [luaVarRef] = `${LUA_GLOBAL_STORAGE_VAR_NAME}['${this[idPropName]}']`;
+    readonly [luaVarRef] = `${LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME}('${this[idPropName]}')`;
 
     /** Promise or value that defines if component is initialized and not yet destroyed */
     initialized: Promise<boolean> | boolean;
@@ -65,6 +69,7 @@ export abstract class RemoteElement<Events extends string = never> {
             await this[initMethodName]();
             return true;
         });
+        ActiveRemoteElementsStorage[this[idPropName]] = this;
     }
 
     private [serverMessageListenerName] = (message: IncomingMessage) => {
@@ -92,6 +97,7 @@ export abstract class RemoteElement<Events extends string = never> {
      */
     async destroy() {
         if(!await this.initialized) return;
+        delete ActiveRemoteElementsStorage[this[idPropName]];
         this.initialized = false;
         this[serverPropName].offMessage(this[serverMessageListenerName]);
         await this[serverPropName].exec(`${this[luaVarRef]} = nil`, [], []);

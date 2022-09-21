@@ -1,0 +1,32 @@
+{
+    "name": "yues-gui-components",
+    "type": "module",
+	"license": "MIT",
+    "scripts": {
+        "build": "tsup && ./postbuild.sh"
+    },
+    "devDependencies": {
+        "@types/node": "^18.7.18",
+        "tsup": "^6.2.3",
+        "typescript": "^4.8.3",
+        "yues-client": "^0.0.7"
+    },
+    "tsup": {
+        "entry": [
+            "src/index.ts"
+        ],
+        "splitting": false,
+        "sourcemap": true,
+        "clean": true,
+        "dts": true,
+        "minify": true,
+        "target": "node18",
+        "format": [
+            "cjs",
+            "esm"
+        ],
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }
+}

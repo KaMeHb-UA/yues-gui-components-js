@@ -1,7 +1,9 @@
-export const initFunc = (ref: string) => `
+import { LUA_SET_TO_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
+
+export const initFunc = () => `
 local res, err = __getFunction(ref)(unpack(args))
 if err ~= nil return nil, err end
-${ref} = res
+return ${LUA_SET_TO_GLOBAL_STORAGE_FUNC_NAME}(res)
 `.slice(1, -1);
 
 export const bindEventFunc = (ref: string) => `

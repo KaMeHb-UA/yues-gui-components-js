@@ -1,5 +1,5 @@
 import type { Server } from 'yues-client';
-import type { EventEmitter as EventEmitterConstructor } from 'node:events';
+import type { MinimalEventEmitter, MinimalEventEmitterConstructor } from '@/@types';
 import { LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';
 import { initFunc, bindEventFunc } from './lua-functions';
@@ -22,11 +22,13 @@ async function basicInit(this: RemoteElement, initBody: string, initArgNames: st
     const server = this[serverPropName];
     // execute provided lua init function
     const func = await server.createFunction(initBody, initArgNames);
-    await server.exec(
-        initFunc(this[luaVarRef]),
+    this[idPropName] = await server.exec(
+        initFunc(),
         ['ref', 'args'],
         [func.ref, initArgs],
     );
+    this[luaVarRef] = `${LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME}('${this[idPropName]}')`;
+    ActiveRemoteElementsStorage[this[idPropName]] = this;
     await func.destroy();
     // set listeners
     server.onMessage(this[serverMessageListenerName]);
@@ -40,20 +42,20 @@ async function basicInit(this: RemoteElement, initBody: string, initArgNames: st
 }
 
 export abstract class RemoteElement<Events extends string = never> {
-    private [eventEmitterPropName]: EventEmitterConstructor;
+    private [eventEmitterPropName]: MinimalEventEmitter;
 
     protected [serverPropName]: Server;
     protected readonly [eventListPropName]: string[] = [];
 
-    readonly [idPropName] = crypto.randomUUID();
-    readonly [luaVarRef] = `${LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME}('${this[idPropName]}')`;
-
     /** Promise or value that defines if component is initialized and not yet destroyed */
     initialized: Promise<boolean> | boolean;
 
+    [idPropName]: string;
+    [luaVarRef]: string;
+
     constructor(
         server: Server,
-        EventEmitter: typeof EventEmitterConstructor,
+        EventEmitter: MinimalEventEmitterConstructor,
         initBody: string,
         initArgNames: string[],
         initArgs: any[],
@@ -69,7 +71,6 @@ export abstract class RemoteElement<Events extends string = never> {
             await this[initMethodName]();
             return true;
         });
-        ActiveRemoteElementsStorage[this[idPropName]] = this;
     }
 
     private [serverMessageListenerName] = (message: IncomingMessage) => {

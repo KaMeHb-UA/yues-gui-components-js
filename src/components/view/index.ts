@@ -1,5 +1,5 @@
 import type { ServerLuaFunction } from 'yues-client';
-import type { ClipboardData, DragOptions, RectF, Vector2dF, Color, SizeF } from '@/components/@types';
+import type { ClipboardData, DragOptions, RectF, Vector2dF, Color, SizeF } from '@/@types';
 import type { Font } from '@/components/font';
 import type { Window } from '@/components/window';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';

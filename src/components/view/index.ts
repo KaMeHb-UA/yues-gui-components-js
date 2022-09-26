@@ -41,6 +41,8 @@ const proxiedMethods = tuple(
 );
 
 const events = tuple(
+    'dragleave',
+    'sizechanged',
 );
 
 export class View<

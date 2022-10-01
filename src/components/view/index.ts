@@ -50,7 +50,7 @@ export class View<
 > extends Responder<
     Events | typeof events[number]
 > {
-    protected readonly [eventListPropName] = (events as string[]).concat(super[eventListPropName]);
+    protected get [eventListPropName](): string[] { return (events as string[]).concat(super[eventListPropName]) };
 
     protected async [initMethodName]() {
         await super[initMethodName]();

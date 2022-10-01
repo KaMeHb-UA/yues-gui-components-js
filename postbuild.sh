@@ -49,6 +49,7 @@ read -r -d '' package_json_text <<EOF
 	"main": "index.cjs",
 	"module": "index.js",
 	"license": "MIT",
+	"type": "module",
 	"repository": "github:KaMeHb-UA/yues-gui-components-js",
 	"peerDependencies": {
 		"yues-client": "^0.0.7"

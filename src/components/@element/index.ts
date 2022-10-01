@@ -45,7 +45,7 @@ export abstract class RemoteElement<Events extends string = never> {
     private [eventEmitterPropName]: MinimalEventEmitter;
 
     protected [serverPropName]: Server;
-    protected readonly [eventListPropName]: string[] = [];
+    protected get [eventListPropName](): string[] { return [] };
 
     /** Promise or value that defines if component is initialized and not yet destroyed */
     initialized: Promise<boolean> | boolean;

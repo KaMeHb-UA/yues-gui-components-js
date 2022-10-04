@@ -1,5 +1,5 @@
 import type { Server } from 'yues-client';
-import { initEnv } from './lua-functions';
+import { initEnv } from '@/lua-functions';
 
 let initialized = false;
 

@@ -2,7 +2,7 @@ import type { Server } from 'yues-client';
 import type { MinimalEventEmitter, MinimalEventEmitterConstructor } from '@/@types';
 import { LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';
-import { initFunc, bindEventFunc } from './lua-functions';
+import { elementInit, bindEvent as bindEventDef } from '@/lua-functions';
 
 export const ActiveRemoteElementsStorage = Object.create(null) as {
     [id: string]: RemoteElement<string>;
@@ -23,8 +23,7 @@ async function basicInit(this: RemoteElement, initBody: string, initArgNames: st
     // execute provided lua init function
     const func = await server.createFunction(initBody, initArgNames);
     this[idPropName] = await server.exec(
-        initFunc(),
-        ['ref', 'args'],
+        ...elementInit(),
         [func.ref, initArgs],
     );
     this[luaVarRef] = `${LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME}('${this[idPropName]}')`;
@@ -33,10 +32,7 @@ async function basicInit(this: RemoteElement, initBody: string, initArgNames: st
     // set listeners
     server.onMessage(this[serverMessageListenerName]);
     // bind events
-    const bindEvent = await server.createFunction(
-        bindEventFunc(this[luaVarRef]),
-        ['event', 'targetRef'],
-    );
+    const bindEvent = await server.createFunction(...bindEventDef(this[luaVarRef]));
     await Promise.all(this[eventListPropName].map(v => bindEvent(v, this[idPropName])));
     await bindEvent.destroy();
 }

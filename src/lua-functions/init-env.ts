@@ -1,10 +1,11 @@
+import { func } from './@func';
 import {
     LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME,
     LUA_SET_TO_GLOBAL_STORAGE_FUNC_NAME,
     LUA_REMOVE_FROM_GLOBAL_STORAGE_FUNC_NAME,
 } from '@/constants';
 
-export const initEnv = `
+export const initEnv = func([], () => `
 local uuid = require 'lua-uuid'
 
 local storage = {}
@@ -47,4 +48,4 @@ end
 function ${LUA_REMOVE_FROM_GLOBAL_STORAGE_FUNC_NAME}(id)
     storage[id] = nil
 end
-`.slice(1, -1);
+`);

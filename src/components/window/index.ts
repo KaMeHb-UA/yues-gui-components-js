@@ -224,7 +224,7 @@ export class Window<
     /**
      * Return the size of content view
      */
-    getcontentsize: ServerLuaFunction<[size: SizeF], void>;
+    getcontentsize: ServerLuaFunction<[], SizeF>;
 
     /**
      * Change the position and size of the window

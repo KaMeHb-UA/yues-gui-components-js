@@ -3,6 +3,7 @@ import type { MinimalEventEmitter, MinimalEventEmitterConstructor } from '@/@typ
 import { LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';
 import { elementInit, bindEvent as bindEventDef } from '@/lua-functions';
+import { platform } from '@/platform';
 
 export const ActiveRemoteElementsStorage = Object.create(null) as {
     [id: string]: RemoteElement<string>;
@@ -19,7 +20,10 @@ type IncomingMessage = {
 };
 
 async function basicInit(this: RemoteElement, initBody: string, initArgNames: string[], initArgs: any[]) {
-    const server = this[serverPropName];
+    const { server, EventEmitter } = await platform;
+    // assign props
+    this[serverPropName] = server;
+    this[eventEmitterPropName] = new EventEmitter();
     // execute provided lua init function
     const func = await server.createFunction(initBody, initArgNames);
     this[idPropName] = await server.exec(
@@ -35,6 +39,9 @@ async function basicInit(this: RemoteElement, initBody: string, initArgNames: st
     const bindEvent = await server.createFunction(...bindEventDef(this[luaVarRef]));
     await Promise.all(this[eventListPropName].map(v => bindEvent(v, this[idPropName])));
     await bindEvent.destroy();
+    // call external init
+    await this[initMethodName]();
+    return true;
 }
 
 export abstract class RemoteElement<Events extends string = never> {
@@ -50,23 +57,16 @@ export abstract class RemoteElement<Events extends string = never> {
     [luaVarRef]: string;
 
     constructor(
-        server: Server,
-        EventEmitter: MinimalEventEmitterConstructor,
         initBody: string,
         initArgNames: string[],
         initArgs: any[],
     ) {
-        this[serverPropName] = server;
-        this[eventEmitterPropName] = new EventEmitter();
         this.initialized = basicInit.call(
             this,
             initBody,
             initArgNames,
             initArgs,
-        ).then(async () => {
-            await this[initMethodName]();
-            return true;
-        });
+        );
     }
 
     private [serverMessageListenerName] = (message: IncomingMessage) => {

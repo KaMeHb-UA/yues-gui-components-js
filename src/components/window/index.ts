@@ -102,8 +102,8 @@ export class Window<
 > {
     protected get [eventListPropName](): string[] { return (events as string[]).concat(super[eventListPropName]) };
 
-    constructor(server: Server, EventEmitter: MinimalEventEmitterConstructor, options: WindowOptions) {
-        super(server, EventEmitter, 'return gui.Window.create(options)', ['options'], [options]);
+    constructor(options: WindowOptions) {
+        super('return gui.Window.create(options)', ['options'], [options]);
     }
 
     protected async [initMethodName]() {

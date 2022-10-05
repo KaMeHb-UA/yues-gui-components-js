@@ -13,6 +13,7 @@ Builds itself using [tsup](https://tsup.egoist.dev).
 > Components you may construct and use directly
 - **[Window](https://libyue.com/docs/v0.11.0/lua/api/window.html)**
 - **[Color](https://libyue.com/docs/v0.11.0/lua/api/color.html)**
+- **[Image](https://libyue.com/docs/v0.11.0/lua/api/image.html)**
 
 ### Implemented basic components
 > Components that can't be constructed but they're the basics for more complex components

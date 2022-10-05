@@ -3,10 +3,9 @@ import type { ClipboardData, DragOptions, RectF, Vector2dF, Color, SizeF } from 
 import type { Font } from '@/components/font';
 import type { Window } from '@/components/window';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';
-import { ActiveRemoteElementsStorage } from '@/components/@element';
 import { Responder } from '@/components/responder';
 import { tuple } from '@/utils';
-import * as lua from './lua-functions';
+import { doDrag, objectGetterOnRef, refGetterOnRef, refSetterOnRef, setColor } from '@/lua-functions';
 
 const proxiedMethods = tuple(
     'offsetfromview',
@@ -58,8 +57,7 @@ export class View<
         const luavar = this[luaVarRef];
         const proxied = await Promise.all([
             server.createFunction(
-                lua.offsetfromview(luavar),
-                ['viewid'],
+                ...objectGetterOnRef(luavar, 'offsetfromview'),
                 async (func, view: View) => {
                     if (!await view.initialized) throw new Error('offsetfromview: view is not initialized');
                     return func(view[idPropName]);
@@ -81,8 +79,7 @@ export class View<
             server.createFunction(`${luavar}:setmousedowncanmovewindow(can)`, ['can']),
             server.createFunction(`return ${luavar}:ismousedowncanmovewindow()`, []),
             server.createFunction(
-                lua.dodrag(luavar),
-                ['data', 'operations'],
+                ...doDrag(luavar, false),
                 async (func, data: ClipboardData, operations: number) => {
                     const fixedData = {
                         type: data.type,
@@ -92,8 +89,7 @@ export class View<
                 },
             ),
             server.createFunction(
-                lua.dodragwithoptions(luavar),
-                ['data', 'operations', 'options'],
+                ...doDrag(luavar, true),
                 async (func, data: ClipboardData, operations: number, options: DragOptions) => {
                     const fixedData = {
                         type: data.type,
@@ -105,40 +101,14 @@ export class View<
             server.createFunction(`${luavar}:canceldrag()`, []),
             server.createFunction(`return ${luavar}:isdragging()`, []),
             server.createFunction(`${luavar}:registerdraggedtypes(types)`, ['types']),
-            server.createFunction(
-                lua.setcursor(luavar),
-                ['cursorid'],
-                (func, cursor: Font) => func(cursor[idPropName]),
-            ),
-            server.createFunction(
-                lua.setcolor(luavar),
-                ['color'],
-                (func, color: Color) => func({
-                    type: typeof color,
-                    value: color,
-                }),
-            ),
-            server.createFunction(
-                lua.setbackgroundcolor(luavar),
-                ['color'],
-                (func, color: Color) => func({
-                    type: typeof color,
-                    value: color,
-                }),
-            ),
+            server.createFunction(...refSetterOnRef(luavar, 'setcursor')),
+            server.createFunction(...setColor(luavar, 'setcolor')),
+            server.createFunction(...setColor(luavar, 'setbackgroundcolor')),
             server.createFunction(`${luavar}:setstyle(style)`, ['style']),
             server.createFunction(`return ${luavar}:getcomputedlayout()`, []),
             server.createFunction(`return ${luavar}:getminimumsize()`, []),
-            server.createFunction(
-                lua.getparent(luavar),
-                [],
-                async (func) => ActiveRemoteElementsStorage[await func()],
-            ),
-            server.createFunction(
-                lua.getwindow(luavar),
-                [],
-                async (func) => ActiveRemoteElementsStorage[await func()],
-            ),
+            server.createFunction(...refGetterOnRef(luavar, 'getparent')),
+            server.createFunction(...refGetterOnRef(luavar, 'getwindow')),
         ]);
         proxiedMethods.forEach((name, i) => this[name] = proxied[i]);
     }

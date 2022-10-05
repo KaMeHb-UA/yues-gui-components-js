@@ -5,20 +5,17 @@ import { initEnv } from '@/lua-functions';
 let platform: Promise<{
     server: Server;
     EventEmitter: MinimalEventEmitterConstructor;
-}> = Promise.resolve(
-    null,
-);
+}>;
 
 export async function getPlatformTools() {
-    const res = await platform;
-    if (!res) throw new Error("Server wasn't initialized properly. Make sure to call `init()` before creating any components");
-    return res;
+    if (!platform) throw new Error("Server wasn't initialized properly. Make sure to call `init()` before creating any components");
+    return platform;
 }
 
 let initialized = false;
 
 export async function init(server: Server, EventEmitter: MinimalEventEmitterConstructor) {
-    if (initialized) return platform.then(() => {});
+    if (initialized) return;
     initialized = true;
     async function getPlatform() {
         await server.initialized;
@@ -29,4 +26,10 @@ export async function init(server: Server, EventEmitter: MinimalEventEmitterCons
         };
     }
     platform = getPlatform();
+}
+
+export async function destroy(childProcessTimeout?: number) {
+    if (!initialized) return;
+    const { server } = await platform;
+    await server.destroy(childProcessTimeout);
 }

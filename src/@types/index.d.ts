@@ -11,3 +11,7 @@ export type {
     MinimalEventEmitter,
     MinimalEventEmitterConstructor,
 } from './event-emitter';
+
+export type {
+    Optional,
+} from './optional';

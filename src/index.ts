@@ -1,2 +1,2 @@
-export { init } from '@/platform';
+export { init, destroy } from '@/platform';
 export * from '@/components';

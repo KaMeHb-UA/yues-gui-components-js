@@ -16,3 +16,4 @@ Builds itself using [tsup](https://tsup.egoist.dev).
 > Components that can't be constructed but they're the basics for more complex components
 - **[Responder](https://libyue.com/docs/v0.11.0/lua/api/responder.html)**
 - **[View](https://libyue.com/docs/v0.11.0/lua/api/view.html)**
+- **[Window](https://libyue.com/docs/v0.11.0/lua/api/window.html)**

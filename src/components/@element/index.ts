@@ -3,7 +3,7 @@ import type { MinimalEventEmitter, MinimalEventEmitterConstructor } from '@/@typ
 import { LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';
 import { elementInit, bindEvent as bindEventDef } from '@/lua-functions';
-import { platform } from '@/platform';
+import { getPlatformTools } from '@/platform';
 
 export const ActiveRemoteElementsStorage = Object.create(null) as {
     [id: string]: RemoteElement<string>;
@@ -20,7 +20,7 @@ type IncomingMessage = {
 };
 
 async function basicInit(this: RemoteElement, initBody: string, initArgNames: string[], initArgs: any[]) {
-    const { server, EventEmitter } = await platform;
+    const { server, EventEmitter } = await getPlatformTools();
     // assign props
     this[serverPropName] = server;
     this[eventEmitterPropName] = new EventEmitter();

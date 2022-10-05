@@ -1,5 +1,5 @@
-import type { Server, ServerLuaFunction } from 'yues-client';
-import type { RectF, Color, SizeF, MinimalEventEmitterConstructor, Optional } from '@/@types';
+import type { ServerLuaFunction } from 'yues-client';
+import type { RectF, Color, SizeF, Optional } from '@/@types';
 import type { View } from '@/components/view';
 import type { Toolbar } from '@/components/toolbar';
 import type { Image } from '@/components/image';

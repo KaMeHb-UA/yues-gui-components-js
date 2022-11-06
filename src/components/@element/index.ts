@@ -1,5 +1,5 @@
 import type { Server } from 'yues-client';
-import type { MinimalEventEmitter, MinimalEventEmitterConstructor } from '@/@types';
+import type { MinimalEventEmitter } from '@/@types';
 import { LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';
 import { elementInit, bindEvent as bindEventDef } from '@/lua-functions';

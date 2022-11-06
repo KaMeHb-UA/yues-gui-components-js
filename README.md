@@ -49,3 +49,4 @@ async function createSample() {
 > \* _A lot of original components may be missing yet_
 - **[Responder](https://libyue.com/docs/v0.11.0/lua/api/responder.html)**
 - **[View](https://libyue.com/docs/v0.11.0/lua/api/view.html)**
+- **[MenuBase](https://libyue.com/docs/v0.11.0/lua/api/menubase.html)**

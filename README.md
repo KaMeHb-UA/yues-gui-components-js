@@ -42,9 +42,13 @@ async function createSample() {
 - **[Image](https://libyue.com/docs/v0.11.0/lua/api/image.html)**
 - **[Font](https://libyue.com/docs/v0.11.0/lua/api/font.html)**
 - **[Toolbar](https://libyue.com/docs/v0.11.0/lua/api/toolbar.html)** * _not really working_
+- **[MenuItem](https://libyue.com/docs/v0.11.0/lua/api/menuitem.html)**
+- **[Menu](https://libyue.com/docs/v0.11.0/lua/api/menu.html)**
+- **[MenuBar](https://libyue.com/docs/v0.11.0/lua/api/menubar.html)**
 
 ### Implemented basic components
 > Components that can't be constructed but they're the basics for more complex components  
 > \* _A lot of original components may be missing yet_
 - **[Responder](https://libyue.com/docs/v0.11.0/lua/api/responder.html)**
 - **[View](https://libyue.com/docs/v0.11.0/lua/api/view.html)**
+- **[MenuBase](https://libyue.com/docs/v0.11.0/lua/api/menubase.html)**

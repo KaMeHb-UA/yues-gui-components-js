@@ -11,6 +11,12 @@ ${objectGetter('obj', 'id').trim()}
 local res = ${ref}:${funcName}(obj)
 `.trim();
 
+const getterByIdxBody = (ref: string, funcName: string) => `
+${checkMethod(ref, funcName).trim()}
+local res = ${ref}:${funcName}(index)
+return ${LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME}(res)
+`.trim();
+
 const arrGetterBody = (ref: string, funcName: string) => `
 ${checkMethod(ref, funcName).trim()}
 local res = {}
@@ -56,3 +62,13 @@ return {
 ${varNames.map(v => `    ${v} = ${v},`).join('\n')}
 }
 `);
+
+export const refGetterOnRefByIdx = (ref: string, funcName: string): [
+    string,
+    string[],
+    (func: ServerLuaFunction, index: number) => Promise<any>,
+] => [
+    getterByIdxBody(ref, funcName),
+    ['index'],
+    async (func: ServerLuaFunction, index: number) => ActiveRemoteElementsStorage[await func(index)],
+];

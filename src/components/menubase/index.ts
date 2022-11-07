@@ -55,6 +55,8 @@ export abstract class MenuBase<Events extends string = never> extends RemoteElem
 
     /**
      * Return the `item` at index
+     * 
+     * _Note that the index counts from 1, following lua's convention_
      */
     itemat: ServerLuaFunction<[index: number], MenuItem>;
 

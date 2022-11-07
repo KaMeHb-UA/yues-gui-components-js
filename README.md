@@ -43,6 +43,7 @@ async function createSample() {
 - **[Font](https://libyue.com/docs/v0.11.0/lua/api/font.html)**
 - **[Toolbar](https://libyue.com/docs/v0.11.0/lua/api/toolbar.html)** * _not really working_
 - **[MenuItem](https://libyue.com/docs/v0.11.0/lua/api/menuitem.html)**
+- **[Menu](https://libyue.com/docs/v0.11.0/lua/api/menu.html)**
 
 ### Implemented basic components
 > Components that can't be constructed but they're the basics for more complex components  

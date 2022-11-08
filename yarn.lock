@@ -735,7 +735,7 @@ yaml@^1.10.2:
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-1.10.2.tgz#2301c5ffbf12b467de8da2333a459e29e7920e4b"
   integrity sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==
 
-yues-client@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/yues-client/-/yues-client-1.0.0.tgz#dbe91283d93443ce7784bd90c247b18e452a0602"
-  integrity sha512-3nIKXmOyd4mvv3avHVP9n+0NM671NWpgnUh2J05KgRUdixXO18737I0TNUPkSoqGS1qMqOwPJURZlqbiJ8Jnew==
+yues-client@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/yues-client/-/yues-client-1.0.1.tgz#e8ac09343ea3dc46032df208549b6130ec52a7b5"
+  integrity sha512-KMvWjcq6yhVSxkMm2X82CkwD32IdEuO5+P68XwEG3V/JeKLael/2fGBpEcQQY3HVBIhufpjzzUQNnLx0J2OwfQ==

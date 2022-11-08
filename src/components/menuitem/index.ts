@@ -59,7 +59,7 @@ const events = tuple(
     'click',
 );
 
-export abstract class MenuItem<
+export class MenuItem<
     Events extends string = never
 > extends RemoteElement<
     Events | typeof events[number]

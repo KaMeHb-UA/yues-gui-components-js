@@ -19,7 +19,7 @@ end
 return gui.Menu.create(items)
 `;
 
-export abstract class Menu<Events extends string = never> extends MenuBase<Events> {
+export class Menu<Events extends string = never> extends MenuBase<Events> {
     protected get [eventListPropName](): string[] { return (events as string[]).concat(super[eventListPropName]) };
 
     constructor (items: MenuItem[]) {

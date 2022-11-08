@@ -31,7 +31,8 @@ export async function init(server: Server, EventEmitter: MinimalEventEmitterCons
 export async function destroy(childProcessTimeout?: number) {
     if (!initialized) return;
     initialized = false;
+    const platformPromise = platform;
     platform = undefined;
-    const { server } = await platform;
+    const { server } = await platformPromise;
     await server.destroy(childProcessTimeout);
 }

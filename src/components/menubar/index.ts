@@ -11,7 +11,7 @@ end
 return gui.MenuBar.create(items)
 `;
 
-export abstract class MenuBar<Events extends string = never> extends MenuBase<Events> {
+export class MenuBar<Events extends string = never> extends MenuBase<Events> {
     constructor (items: MenuItem[]) {
         super(luaConstructor.trim(), ['ids'], [items.map(item => item[idPropName])]);
     }

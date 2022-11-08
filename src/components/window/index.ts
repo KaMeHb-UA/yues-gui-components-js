@@ -152,7 +152,6 @@ export class Window<
             server.createFunction(`return ${luavar}:ismovable()`, []),
             server.createFunction(`${luavar}:settitle(title)`, ['title']),
             server.createFunction(`return ${luavar}:gettitle()`, []),
-            server.createFunction(`return ${luavar}:gettitle()`, []),
             server.createFunction(...setColor(luavar, 'setbackgroundcolor')),
             server.createFunction(...refSetterOnRef(luavar, 'settoolbar')),
             server.createFunction(...refGetterOnRef(luavar, 'gettoolbar')),

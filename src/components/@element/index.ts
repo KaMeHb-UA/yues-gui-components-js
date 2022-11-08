@@ -1,6 +1,6 @@
 import type { Server } from 'yues-client';
 import type { MinimalEventEmitter } from '@/@types';
-import { LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
+import { LUA_GET_FROM_GLOBAL_STORAGE_FUNC_NAME, LUA_REMOVE_FROM_GLOBAL_STORAGE_FUNC_NAME } from '@/constants';
 import { serverPropName, idPropName, luaVarRef, eventListPropName, initMethodName } from '@/components/@symbols';
 import { elementInit, bindEvent as bindEventDef } from '@/lua-functions';
 import { getPlatformTools } from '@/platform';
@@ -97,7 +97,7 @@ export abstract class RemoteElement<Events extends string = never> {
         delete ActiveRemoteElementsStorage[this[idPropName]];
         this.initialized = false;
         this[serverPropName].offMessage(this[serverMessageListenerName]);
-        await this[serverPropName].exec(`${this[luaVarRef]} = nil`, [], []);
+        await this[serverPropName].exec(`${LUA_REMOVE_FROM_GLOBAL_STORAGE_FUNC_NAME}(id)`, ['id'], [this[idPropName]]);
         delete this[serverPropName];
     }
 }

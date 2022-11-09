@@ -35,8 +35,12 @@ async function createSample() {
 ```
 
 ### Implemented components
-> Components you may construct and use directly  
 > \* _A lot of original components may be missing yet_
+
+> Specific components
+- **[App](https://libyue.com/docs/v0.11.0/lua/api/app.html)**
+
+> Components you may construct and use directly
 - **[Window](https://libyue.com/docs/v0.11.0/lua/api/window.html)**
 - **[Color](https://libyue.com/docs/v0.11.0/lua/api/color.html)**
 - **[Image](https://libyue.com/docs/v0.11.0/lua/api/image.html)**

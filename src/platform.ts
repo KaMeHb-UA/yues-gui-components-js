@@ -1,5 +1,6 @@
 import type { Server } from 'yues-client';
 import type { MinimalEventEmitterConstructor } from '@/@types';
+import { App } from '@/components/app';
 import { initEnv } from '@/lua-functions';
 
 let platform: Promise<{
@@ -13,6 +14,7 @@ export async function getPlatformTools() {
 }
 
 let initialized = false;
+let app: App;
 
 export async function init(server: Server, EventEmitter: MinimalEventEmitterConstructor) {
     if (initialized) return;
@@ -26,6 +28,9 @@ export async function init(server: Server, EventEmitter: MinimalEventEmitterCons
         };
     }
     platform = getPlatform();
+    app = new App();
+    await app.initialized;
+    return app;
 }
 
 export async function destroy(childProcessTimeout?: number) {
@@ -34,5 +39,9 @@ export async function destroy(childProcessTimeout?: number) {
     const platformPromise = platform;
     platform = undefined;
     const { server } = await platformPromise;
+    if (app) {
+        await app.initialized;
+        await app.destroy();
+    }
     await server.destroy(childProcessTimeout);
 }
